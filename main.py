@@ -1,29 +1,36 @@
-from stats import count_words
-from stats import count_characters_in_text
+from stats import (
+    get_num_words,
+    chars_dict_to_sorted_list,
+    get_chars_dict,
+)
 
-def get_book_text(path) -> str:
-    """
-    Reads the content of a book file and returns it as a string.
-
-    Args:
-        path (str): The path to the book file.
-
-    Returns:
-        str: The content of the book file.
-    """
-    with open(path) as file:
-        text = file.read()
-    return text
 
 def main():
-    """
-    Main function to execute the script.
-    """
-    book_text = get_book_text('./books/frankenstein.txt')
+    book_path = "books/frankenstein.txt"
+    text = get_book_text(book_path)
+    num_words = get_num_words(text)
+    chars_dict = get_chars_dict(text)
+    chars_sorted_list = chars_dict_to_sorted_list(chars_dict)
+    print_report(book_path, num_words, chars_sorted_list)
 
-    num_words = count_words(book_text)
-    characters_in_text = count_characters_in_text(book_text)
-    print(f"{num_words} words found in the document.")
-    print(characters_in_text)
+
+def get_book_text(path):
+    with open(path) as f:
+        return f.read()
+
+
+def print_report(book_path, num_words, chars_sorted_list):
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print("----------- Word Count ----------")
+    print(f"Found {num_words} total words")
+    print("--------- Character Count -------")
+    for item in chars_sorted_list:
+        if not item["char"].isalpha():
+            continue
+        print(f"{item['char']}: {item['num']}")
+
+    print("============= END ===============")
+
 
 main()
